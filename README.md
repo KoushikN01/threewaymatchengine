@@ -261,6 +261,14 @@ The main objective of this project is to:
   - **Fallback Model**: `gemini-3.5-flash-lite`
   - **Resilience**: Features automatic retry on rate limits, quota fallback switching, and a local deterministic parser backup.
 
+### Frontend State Management
+
+The application uses React-based local state and a centralized API communication approach for managing reconciliation data.
+
+The backend is treated as the source of truth because reconciliation results are dynamically calculated from the latest documents and SKU Master records.
+
+This approach keeps the frontend simple and avoids duplicating business logic in the UI. The frontend requests the latest reconciliation data from the backend whenever documents or SKU Master records change.
+
 ---
 
 ## 7. Matching Rules
@@ -276,7 +284,7 @@ The backend matching engine evaluates multiple rule sets deterministically:
   `reason: invoice_qty_exceeds_po_qty`
 
 ### 2. Date Check
-- **Invoice Date After PO Date**: Invoice Date must not be earlier than PO Date  
+- **Invoice Date After PO Date**: Invoice Date must not be later than the PO Date (Invoice Date > PO Date)  
   `reason: invoice_date_after_po_date`
 
 ### 3. Duplicate Document Checks
@@ -606,6 +614,96 @@ The SKU deletion endpoint was tested successfully.
 The workspace reset endpoint was tested to verify that document data can be cleared for a fresh test.
 
 ![Reset Workspace](docs/postman/15-reset-workspace.png)
+
+---
+
+### Sample API Outputs
+
+Below are the actual sample JSON responses returned by the backend REST API endpoints:
+
+#### 1. Parsed Document Output (`POST /api/documents/upload` or `GET /api/documents/:id`)
+
+```json
+{
+  "document": {
+    "_id": "66d091e2b4f12a0012345678",
+    "type": "po",
+    "poNumber": "CI4PO05788",
+    "vendorName": "M/s AFP",
+    "poDate": "2026-08-20",
+    "totalAmount": 11038,
+    "items": [
+      {
+        "itemCode": "11423",
+        "description": "Cheesy Spicy Veg Momos 24 Pcs",
+        "quantity": 50,
+        "rate": 220.76,
+        "mrp": 305.00
+      }
+    ]
+  },
+  "duplicate": false
+}
+```
+
+---
+
+#### 2. Three-Way Reconciliation Output (`GET /api/match/:poNumber`)
+
+```json
+{
+  "poNumber": "CI4PO05788",
+  "status": "mismatch",
+  "reasons": [
+    "invoice_qty_exceeds_grn_qty"
+  ],
+  "lineResults": [
+    {
+      "key": "master:66d091e2b4f12a0087654321",
+      "itemCode": "11423",
+      "description": "Cheesy Spicy Veg Momos 24 Pcs",
+      "skuMasterId": "66d091e2b4f12a0087654321",
+      "ordered": 50,
+      "received": 40,
+      "billed": 50,
+      "variance": 10,
+      "reasons": [
+        "invoice_qty_exceeds_grn_qty"
+      ]
+    }
+  ],
+  "summary": {
+    "totalItems": 1,
+    "matchedItems": 0,
+    "partialItems": 0,
+    "unmappedItems": 0,
+    "quantityMismatches": 1,
+    "priceMismatches": 0
+  }
+}
+```
+
+---
+
+#### 3. Reconciliation Summary Output (`GET /api/summary/:poNumber`)
+
+```json
+{
+  "poNumber": "CI4PO05788",
+  "status": "mismatch",
+  "reasons": [
+    "invoice_qty_exceeds_grn_qty"
+  ],
+  "summary": {
+    "totalItems": 1,
+    "matchedItems": 0,
+    "partialItems": 0,
+    "unmappedItems": 0,
+    "quantityMismatches": 1,
+    "priceMismatches": 0
+  }
+}
+```
 
 ---
 
