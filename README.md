@@ -257,6 +257,9 @@ The main objective of this project is to:
 
 ### AI / Document Extraction
 - **Google Gemini API**: Multimodal document understanding to convert raw document images/PDFs into structured JSON schemas.
+  - **Primary Model**: `gemini-3.5-flash` / `gemini-3.6-flash`
+  - **Fallback Model**: `gemini-3.5-flash-lite`
+  - **Resilience**: Features automatic retry on rate limits, quota fallback switching, and a local deterministic parser backup.
 
 ---
 
@@ -587,6 +590,8 @@ AUTH_TOKEN=reconciliation-bearer-token-dev
 BACKEND_PORT=4000
 FRONTEND_ORIGIN=http://localhost:3000
 GEMINI_API_KEY=your_actual_gemini_api_key
+GEMINI_PRIMARY_MODEL=gemini-3.5-flash
+GEMINI_FALLBACK_MODEL=gemini-3.5-flash-lite
 ```
 
 > [!CAUTION]
