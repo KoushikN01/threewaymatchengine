@@ -483,6 +483,130 @@ Recommended sequential flow for testing the APIs independently via Postman:
 12. Reset Workspace (POST /api/documents/reset)
 ```
 
+### Postman API Testing Evidence
+
+The backend REST APIs were tested independently using Postman.
+
+The API testing verifies authentication, backend health, document upload, document retrieval, three-way matching, reconciliation summary, SKU Master operations, and workspace reset functionality.
+
+#### 1. Login API
+
+The Login API was tested successfully and returned the authentication token.
+
+![Login API](docs/postman/01-login-api.png)
+
+---
+
+#### 2. Health Check API
+
+The Health Check API was tested to confirm that the reconciliation backend is running correctly.
+
+![Health Check API](docs/postman/02-health-api.png)
+
+---
+
+#### 3. Purchase Order Upload
+
+The Purchase Order upload endpoint was tested using multipart form-data.
+
+![Upload PO](docs/postman/03-upload-po.png)
+
+---
+
+#### 4. GRN Upload
+
+The Goods Receipt Note upload endpoint was tested successfully.
+
+![Upload GRN](docs/postman/04-upload-grn.png)
+
+---
+
+#### 5. Invoice Upload
+
+The Invoice upload endpoint was tested successfully.
+
+![Upload Invoice](docs/postman/05-upload-invoice.png)
+
+---
+
+#### 6. List Documents
+
+The document listing endpoint was tested to verify that uploaded PO, GRN, and Invoice documents can be retrieved.
+
+![List Documents](docs/postman/06-list-documents.png)
+
+---
+
+#### 7. Get Document Details
+
+The individual document details endpoint was tested using a document ID.
+
+![Document Details](docs/postman/07-document-details.png)
+
+---
+
+#### 8. View Original Document
+
+The original uploaded PDF/image endpoint was tested to verify that the stored document can be viewed.
+
+![Document File](docs/postman/08-document-file.png)
+
+---
+
+#### 9. Three-Way Matching API
+
+The main reconciliation endpoint was tested to verify the comparison between the PO, GRN, and Invoice.
+
+![Three-Way Match](docs/postman/09-three-way-match.png)
+
+---
+
+#### 10. Reconciliation Summary
+
+The summary endpoint was tested to verify the overall reconciliation status and reasons.
+
+![Reconciliation Summary](docs/postman/10-summary.png)
+
+---
+
+#### 11. List SKU Master Records
+
+The SKU Master listing endpoint was tested successfully.
+
+![List SKU Master](docs/postman/11-list-sku.png)
+
+---
+
+#### 12. Create SKU Master Record
+
+The SKU creation endpoint was tested using a JSON request body.
+
+![Create SKU](docs/postman/12-create-sku.png)
+
+---
+
+#### 13. Update SKU Master Record
+
+The SKU update endpoint was tested using a PATCH request.
+
+![Update SKU](docs/postman/13-update-sku.png)
+
+---
+
+#### 14. Delete SKU Master Record
+
+The SKU deletion endpoint was tested successfully.
+
+![Delete SKU](docs/postman/14-delete-sku.png)
+
+---
+
+#### 15. Reset Workspace
+
+The workspace reset endpoint was tested to verify that document data can be cleared for a fresh test.
+
+![Reset Workspace](docs/postman/15-reset-workspace.png)
+
 ---
 
 ## 16. Important Functional Test Cases
