@@ -4,7 +4,7 @@ A full-stack procurement reconciliation application built with **Next.js (App Ro
 
 ---
 
-## 1. Simple Humanized Explanation
+## 1. Explanation
 
 Think of this system as an **automatic digital checker** for procurement operations.
 
@@ -143,34 +143,5 @@ GEMINI_API_KEY=your_actual_gemini_api_key
 
 ---
 
-## 7. How to Explain This Project in an Interview
-
-### 30-Second Explanation
-> "I built a Three-Way Match Engine that automates procurement auditing between Purchase Orders, Goods Receipts, and Invoices. Uploaded PDFs are parsed into structured JSON using Gemini API OCR, resolved against a canonical SKU Master catalogue, stored in MongoDB, and reconciled by a deterministic TypeScript comparison engine that surfaces quantity, price, and MRP mismatches in a Next.js dashboard."
-
-### 1-Minute Explanation
-> "In supply chain management, companies suffer huge financial leaks by paying invoices for items that never arrived or were billed above agreed contract rates. My solution accepts PO, GRN, and Invoice documents uploaded in any order. It uses Gemini AI for OCR text extraction, validates output with Zod schemas, maps raw vendor codes to a unified SKU Master ID, and recomputes three-way match status on every read. The frontend features split-screen original document previews, highlighted cell variances, and a full SKU Master management panel."
-
-### Common Interview Questions & Answers
-
-- **Why did you separate Gemini from the Match Engine?**  
-  *Gemini is non-deterministic and can hallucinate decisions. Using 'Gemini for extraction, Backend for business rules' ensures strict financial accuracy while benefiting from AI OCR flexibility.*
-- **How do out-of-order uploads work?**  
-  *Documents are linked by a loose string `poNumber` index rather than strict relational foreign keys. When a document is saved, the engine queries MongoDB for all existing documents sharing that `poNumber` and calculates the match dynamically.*
-- **What happens if a SKU is unmapped?**  
-  *Unmapped items are never deleted. They are preserved in DB with `skuMasterId: null` and flagged with an `unmapped_master_sku` warning banner until mapped in SKU Master.*
-
----
-
-## 8. Memory Card (Quick Reference)
-
-```
-PO           = WHAT WE WANT
-GRN          = WHAT WE GOT
-INVOICE      = WHAT THEY WANT US TO PAY
-SKU MASTER   = HOW WE IDENTIFY THE SAME PRODUCT
-GEMINI       = READS/EXTRACTS PDF DATA
-BACKEND      = ENFORCES DETERMINISTIC MATCHING RULES
-MONGODB      = PERSISTS DOCUMENTS & RECONCILIATION AUDIT
 FRONTEND     = SHOWS SUMMARY, PREVIEWS & MISMATCH HIGHLIGHTS
 ```
